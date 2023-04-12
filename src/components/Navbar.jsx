@@ -1,11 +1,10 @@
-import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 export const Navbar = ({userName, setUser}) => {    
 
     const navigate = useNavigate();
     const handleSession = () => {
-        Cookies.remove("CheckAuth")
+        localStorage.removeItem("CheckAuth");
         setUser('');
         navigate("/");
     }

@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { createTaskRequest, deleteTaskRequest, editTaskRequest, getOneTaskRequest, getTaskRequest, getUserRequest } from "../api/backendConnection";
-import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { Navbar } from "../components/Navbar";
@@ -14,10 +13,10 @@ export const useTask = () => {
 };
 
 export const TaskContainer = ({ children }) => {
-  const cookie = Cookies.get("CheckAuth");
   const [user, setUser] = useState([]);
   const [task, setTask] = useState([]);
   const [completedTasks, setCompletedTasks] = useState(false);
+  const [authCookie, setAuthCookie] = useState('');
   const navigate = useNavigate();
 
   //obtener usuario
@@ -25,6 +24,11 @@ export const TaskContainer = ({ children }) => {
     try {
       const res = await getUserRequest(fields);
       setUser(res.data);
+      const cookiesAuth = localStorage.getItem("CheckAuth");
+      if(cookiesAuth === '' || !cookiesAuth){
+        localStorage.setItem("CheckAuth", "SiAutentico");
+        setAuthCookie("CheckAuth");
+      }
       toast.success(`Hola ${res.data.Name}`, {
         style: {
           border: "1px solid cyan",
@@ -91,9 +95,9 @@ export const TaskContainer = ({ children }) => {
 
   useEffect(() => {
     (async() => {
-      if(cookie){
-        await getUser({ Name: "CheckAuth", Value: cookie });
-        //await getTask(usuario.data.Email);
+      if(authCookie === "CheckAuth"){
+        const valor = localStorage.getItem(authCookie)
+        await getUser({ Name: authCookie, Value: valor});
         navigate(
           window.location.pathname == "/" ? "/inicio" : window.location.pathname
         );
@@ -104,7 +108,7 @@ export const TaskContainer = ({ children }) => {
   }, [])
 
   return (
-    <contextTask.Provider value={{ user, setUser, task, setTask, getUser, getTask, createTask, deleteTask, getOneTask, editTask, completedTasks, setCompletedTasks }}>
+    <contextTask.Provider value={{ user, setUser, task, authCookie, setAuthCookie, setTask, getUser, getTask, createTask, deleteTask, getOneTask, editTask, completedTasks, setCompletedTasks }}>
       {window.location.pathname == "/" || window.location.pathname == "/register" ? '' : <Navbar userName={user.Name} setUser={setUser}/>}
       {window.location.pathname != "/" && !user ? '' : children}
       <Footer/>
