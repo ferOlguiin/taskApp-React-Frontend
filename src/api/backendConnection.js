@@ -4,6 +4,7 @@ const url = import.meta.env.VITE_BASE_URL;
 export const getUserRequest = async (fields) => await axios.post(`${url}/user`, fields, {
     withCredentials: true
 });
+export const logoutUserRequest = async () => await axios.delete(`${url}/logout`)
 
 export const getTaskRequest = async (email) => await axios.get(`${url}/allpost/` + email);
 export const createTaskRequest = async (fields) => await axios.post(`${url}/post`, fields);

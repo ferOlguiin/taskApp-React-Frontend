@@ -1,9 +1,13 @@
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import { useTask } from "../context/taskContext";
 
 export const Navbar = ({userName, setUser}) => {    
 
+    const {logoutUser} = useTask();
     const navigate = useNavigate();
-    const handleSession = () => {
+    const handleSession = async () => {
+        await logoutUser();
         Cookies.remove("Check");
         setUser('');
         navigate("/");

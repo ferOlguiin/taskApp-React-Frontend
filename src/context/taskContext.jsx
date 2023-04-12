@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { createTaskRequest, deleteTaskRequest, editTaskRequest, getOneTaskRequest, getTaskRequest, getUserRequest } from "../api/backendConnection";
+import { createTaskRequest, deleteTaskRequest, editTaskRequest, getOneTaskRequest, getTaskRequest, getUserRequest, logoutUserRequest } from "../api/backendConnection";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { Navbar } from "../components/Navbar";
@@ -42,6 +42,11 @@ export const TaskContainer = ({ children }) => {
       return error.response;
     }
   };
+
+  //deslogear usuario
+  const logoutUser = async () => {
+    await logoutUserRequest();
+  }
 
   //obtener tareas
   const getTask = async (email) => {
@@ -109,7 +114,7 @@ export const TaskContainer = ({ children }) => {
   }, [])
 
   return (
-    <contextTask.Provider value={{ user, setUser, task, setTask, getUser, getTask, createTask, deleteTask, getOneTask, editTask, completedTasks, setCompletedTasks }}>
+    <contextTask.Provider value={{ user, setUser, task, setTask, getUser, logoutUser, getTask, createTask, deleteTask, getOneTask, editTask, completedTasks, setCompletedTasks }}>
       {window.location.pathname == "/" || window.location.pathname == "/register" ? '' : <Navbar userName={user.Name} setUser={setUser}/>}
       {window.location.pathname != "/" && !user ? '' : children}
       <Footer/>
