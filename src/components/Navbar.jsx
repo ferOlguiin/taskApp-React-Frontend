@@ -4,7 +4,7 @@ export const Navbar = ({userName, setUser}) => {
 
     const navigate = useNavigate();
     const handleSession = () => {
-        localStorage.removeItem("CheckAuth");
+        Cookies.remove("Check");
         setUser('');
         navigate("/");
     }

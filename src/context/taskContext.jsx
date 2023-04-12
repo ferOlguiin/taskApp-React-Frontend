@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
+import Cookies from 'js-cookie';
 
 const contextTask = createContext();
 
@@ -16,20 +17,17 @@ export const TaskContainer = ({ children }) => {
   const [user, setUser] = useState([]);
   const [task, setTask] = useState([]);
   const [completedTasks, setCompletedTasks] = useState(false);
-  const [authCookie, setAuthCookie] = useState('');
   const navigate = useNavigate();
-console.log(authCookie, "esta es la authcookie como estado general")
   //obtener usuario
   const getUser = async (fields) => {
     try {
       const res = await getUserRequest(fields);
       setUser(res.data);
-      const cookiesAuth = localStorage.getItem("CheckAuth");
+      const cookiesAuth = Cookies.get('name');
       console.log(cookiesAuth, "esto es la cookieAuth lo q devuelve al logear usuario")
-      if(cookiesAuth === null){
-        console.log("como devolvio null aca meto el item")
-        localStorage.setItem("CheckAuth", "SiAutentico");
-        setAuthCookie("CheckAuth");
+      if(cookiesAuth === undefined || !cookiesAuth){
+        console.log("como devolvio undefined aca meto el item")
+        Cookies.set("Check", "SiAutentico", { expires: 1});
       }
       toast.success(`Hola ${res.data.Name}`, {
         style: {
@@ -97,10 +95,10 @@ console.log(authCookie, "esta es la authcookie como estado general")
 
   useEffect(() => {
     (async() => {
-      if(localStorage.getItem("CheckAuth") !== null){
-        const valor = localStorage.getItem("CheckAuth");
-        console.log(valor, "este es el valor del item authCOokie")
-        await getUser({ Name: authCookie, Value: valor});
+      if(Cookies.get("Check") !== undefined){
+        const valueCookie = Cookies.get("Check");
+        console.log(valueCookie, "este es el valor de la cookie check")
+        await getUser({ Name: "CheckAuth", Value: valueCookie});
         navigate(
           window.location.pathname == "/" ? "/inicio" : window.location.pathname
         );
@@ -111,7 +109,7 @@ console.log(authCookie, "esta es la authcookie como estado general")
   }, [])
 
   return (
-    <contextTask.Provider value={{ user, setUser, task, authCookie, setAuthCookie, setTask, getUser, getTask, createTask, deleteTask, getOneTask, editTask, completedTasks, setCompletedTasks }}>
+    <contextTask.Provider value={{ user, setUser, task, setTask, getUser, getTask, createTask, deleteTask, getOneTask, editTask, completedTasks, setCompletedTasks }}>
       {window.location.pathname == "/" || window.location.pathname == "/register" ? '' : <Navbar userName={user.Name} setUser={setUser}/>}
       {window.location.pathname != "/" && !user ? '' : children}
       <Footer/>
