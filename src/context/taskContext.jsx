@@ -25,6 +25,7 @@ export const TaskContainer = ({ children }) => {
       const res = await getUserRequest(fields);
       setUser(res.data);
       const cookiesAuth = localStorage.getItem("CheckAuth");
+      console.log(cookiesAuth, "esto es la cookieAuth lo q devuelve al logear usuario")
       if(cookiesAuth === '' || !cookiesAuth){
         localStorage.setItem("CheckAuth", "SiAutentico");
         setAuthCookie("CheckAuth");
@@ -96,7 +97,8 @@ export const TaskContainer = ({ children }) => {
   useEffect(() => {
     (async() => {
       if(authCookie === "CheckAuth"){
-        const valor = localStorage.getItem(authCookie)
+        const valor = localStorage.getItem(authCookie);
+        console.log(valor, "este es el valor del item authCOokie")
         await getUser({ Name: authCookie, Value: valor});
         navigate(
           window.location.pathname == "/" ? "/inicio" : window.location.pathname
