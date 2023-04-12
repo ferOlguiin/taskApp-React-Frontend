@@ -8,9 +8,10 @@ export const Navbar = ({userName, setUser}) => {
     const navigate = useNavigate();
     const handleSession = async () => {
         await logoutUser();
-        Cookies.remove("Check");
-        setUser('');
-        navigate("/");
+        //Cookies.remove("Check");
+        //setUser('');
+        //navigate("/");
+        console.log("probando el logout")
     }
 
   return (
