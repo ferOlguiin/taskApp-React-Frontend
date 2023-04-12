@@ -18,7 +18,7 @@ export const TaskContainer = ({ children }) => {
   const [completedTasks, setCompletedTasks] = useState(false);
   const [authCookie, setAuthCookie] = useState('');
   const navigate = useNavigate();
-
+console.log(authCookie, "esta es la authcookie como estado general")
   //obtener usuario
   const getUser = async (fields) => {
     try {
@@ -26,7 +26,8 @@ export const TaskContainer = ({ children }) => {
       setUser(res.data);
       const cookiesAuth = localStorage.getItem("CheckAuth");
       console.log(cookiesAuth, "esto es la cookieAuth lo q devuelve al logear usuario")
-      if(cookiesAuth === '' || !cookiesAuth){
+      if(cookiesAuth === null){
+        console.log("como devolvio null aca meto el item")
         localStorage.setItem("CheckAuth", "SiAutentico");
         setAuthCookie("CheckAuth");
       }
