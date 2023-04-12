@@ -97,8 +97,8 @@ console.log(authCookie, "esta es la authcookie como estado general")
 
   useEffect(() => {
     (async() => {
-      if(authCookie === "CheckAuth"){
-        const valor = localStorage.getItem(authCookie);
+      if(localStorage.getItem("CheckAuth") !== null){
+        const valor = localStorage.getItem("CheckAuth");
         console.log(valor, "este es el valor del item authCOokie")
         await getUser({ Name: authCookie, Value: valor});
         navigate(
