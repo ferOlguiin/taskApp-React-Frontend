@@ -24,9 +24,7 @@ export const TaskContainer = ({ children }) => {
       const res = await getUserRequest(fields);
       setUser(res.data);
       const cookiesAuth = Cookies.get('name');
-      console.log(cookiesAuth, "esto es la cookieAuth lo q devuelve al logear usuario")
       if(cookiesAuth === undefined || !cookiesAuth){
-        console.log("como devolvio undefined aca meto el item")
         Cookies.set("Check", "SiAutentico", { expires: 1});
       }
       toast.success(`Hola ${res.data.Name}`, {
@@ -102,7 +100,6 @@ export const TaskContainer = ({ children }) => {
     (async() => {
       if(Cookies.get("Check") !== undefined){
         const valueCookie = Cookies.get("Check");
-        console.log(valueCookie, "este es el valor de la cookie check")
         await getUser({ Name: "CheckAuth", Value: valueCookie});
         navigate(
           window.location.pathname == "/" ? "/inicio" : window.location.pathname
